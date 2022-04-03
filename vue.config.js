@@ -6,7 +6,7 @@ module.exports = {
             // nodeModulesPath: ['../../node_modules', './node_modules'],
             nodeIntegration: true,
             builderOptions: {
-                extraResources: ['data/default.db', 'src/routingData.txt', 'src/dataAboutWebsite.txt', 'src/logs.txt', 'src/userAgent.txt'],
+                // extraResources: ['data/default.db'],
             },
         },
     },

@@ -14,7 +14,6 @@ import {
 import installExtension, {
     VUEJS_DEVTOOLS
 } from 'electron-devtools-installer';
-import DB from './controllers/DB';
 import Fs from 'fs';
 import path from 'path';
 import axios from 'axios';
@@ -40,7 +39,6 @@ protocol.registerSchemesAsPrivileged([{
         standard: true
     }
 }]);
-let logPath = path.join(isDevelopment ? __dirname + '/data/logs.txt' : __static + '/data/logs.txt');
 
 //=================================
 function logApp(name, value) {
@@ -54,94 +52,23 @@ async function initDataBase() {
     try {
         logApp(' =================== initDataBase ================== ');
         //=================== DATABASE ===============================
-        let dbPath = '';
-        dbPath = store.get('databaseFile');
-        if (!dbPath || !Fs.existsSync(dbPath)) {
-            dbPath = path.join(isDevelopment ? __dirname + '/data/default.db' : __static.replace('\\app.asar', '') + '/data/default.db');
-            store.set('databaseFile', dbPath);
-        }
-        await DB.loadDatabase(dbPath);
+        // let dbPath = '';
+        // dbPath = store.get('databaseFile');
+        // if (!dbPath || !Fs.existsSync(dbPath)) {
+        //     dbPath = path.join(isDevelopment ? __dirname + '/data/default.db' : __static.replace('\\app.asar', '') + '/data/default.db');
+        //     store.set('databaseFile', dbPath);
+        // }
+        // await DB.loadDatabase(dbPath);
 
-        ipcMain.on('DB-loadDatabase', async function (event, arg) {
-            try {
-                await DB.loadDatabase(arg);
-                win.webContents.send('reload');
-            } catch (error) {
-                event.returnValue = null;
-            }
-            event.returnValue = arg;
-        });
-
-        //=================== FOLDER ===============================
-        ipcMain.on('DB-getFolder', async function (event, arg) {
-            let data = null;
-            try {
-                data = await DB.getFolder();
-            } catch (error) {}
-            event.returnValue = data;
-        });
-        ipcMain.on('DB-createFolder', async function (event, arg) {
-            try {
-                await DB.createFolder(arg);
-            } catch (error) {}
-            event.returnValue = arg;
-        });
-        ipcMain.on('DB-updateFolder', async function (event, arg) {
-            try {
-                await DB.updateFolder(arg.filter, arg.dataUpdate);
-            } catch (error) {}
-            event.returnValue = arg;
-        });
-        ipcMain.on('DB-deleteFolder', async function (event, arg) {
-            try {
-                await DB.removeFolder(arg);
-            } catch (error) {}
-            event.returnValue = arg;
-        });
-        //=================== ACCOUNT ===============================
-        ipcMain.on('DB-getAccount', async function (event, arg) {
-            let data = null;
-            try {
-                data = await DB.getAccount(arg);
-            } catch (error) {}
-            event.returnValue = data;
-        });
-        ipcMain.on('DB-getAccountDeleted', async function (event, arg) {
-            let data = null;
-            try {
-                data = await DB.getAccountDeleted()
-            } catch (error) {}
-            event.returnValue = data;
-        });
-        ipcMain.on('DB-addListAccount', async function (event, arg) {
-            let newList = null;
-            try {
-                newList = await DB.addListAccount(arg)
-            } catch (error) {}
-            event.returnValue = newList;
-        });
-        ipcMain.on('DB-checkExistAccount', async function (event, arg) {
-            let result = null;
-            try {
-                result = await DB.checkExistAccount(arg)
-            } catch (error) {}
-            event.returnValue = result;
-        });
-        ipcMain.on('DB-deleteAccount', async function (event, arg) {
-            try {
-                await DB.deleteAccount(arg);
-            } catch (error) {}
-            event.returnValue = arg;
-        });
-        ipcMain.on('DB-updateAccount', async function (event, arg) {
-            try {
-                await DB.updateAccount(arg);
-            } catch (error) {
-
-            }
-            event.returnValue = arg;
-            win.webContents.send('reload');
-        });
+        // ipcMain.on('DB-loadDatabase', async function (event, arg) {
+        //     try {
+        //         await DB.loadDatabase(arg);
+        //         win.webContents.send('reload');
+        //     } catch (error) {
+        //         event.returnValue = null;
+        //     }
+        //     event.returnValue = arg;
+        // });
     } catch (error) {
         logApp(error);
         console.log(error);
